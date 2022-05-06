@@ -4,16 +4,10 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function seed() {
-  const email = "rachel@remix.run";
+  const email = "me@superkev.in";
+  const hashedPassword = await bcrypt.hash("password", 10);
 
-  // cleanup the existing database
-  await prisma.user.delete({ where: { email } }).catch(() => {
-    // no worries if it doesn't exist yet
-  });
-
-  const hashedPassword = await bcrypt.hash("racheliscool", 10);
-
-  const user = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email,
       password: {
@@ -24,23 +18,36 @@ async function seed() {
     },
   });
 
-  await prisma.note.create({
+  await prisma.campaign.create({
     data: {
-      title: "My first note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
+      name: "Kevin's Campaign",
+      budgets: {
+        create: [
+          {
+            name: "Kevin's Budget",
+            entries: {
+              create: [
+                {
+                  amountCents: 100,
+                  date: new Date(2022, 4, 1),
+                  contribution: {
+                    create: {}
+                  }
+                },
+                {
+                  amountCents: 90,
+                  date: new Date(2022, 5, 1),
+                  disbursement: { create: {} }
+                }
+              ]
+            }
+          },
+          { name: 'Empty Budget' },
+        ]
+      }
+    }
   });
-
-  await prisma.note.create({
-    data: {
-      title: "My second note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
-  });
-
-  console.log(`Database has been seeded. 🌱`);
+  await prisma.campaign.create({ data: { name: "Empty Campaign" } });
 }
 
 seed()
