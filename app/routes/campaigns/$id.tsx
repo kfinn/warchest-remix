@@ -24,7 +24,7 @@ export default function CampaignId() {
       <ul>
         {
           ..._.map(campaign.budgets, (budget) => (
-            <li key={budget.id}><Link to={`/budgets/${budget.id}`}>{budget.name}</Link></li>
+            <li key={budget.id}><Link to={`/budgets/${budget.id}/contributions`}>{budget.name}</Link></li>
           ))
         }
       </ul>

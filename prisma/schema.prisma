@@ -49,7 +49,7 @@ model Budget {
 
 model Entry {
   id String @id @default(cuid())
-  amountCents Int
+  amount Decimal
   date DateTime @db.Date
 
   budgetId String
